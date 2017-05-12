@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<manifest>
+
+  <default revision="morty" sync-j="1"/>
+
+  <remote fetch="http://git.yoctoproject.org/git" name="yocto"/>
+  <remote fetch="https://github.com" name="github"/>
+
+  <project remote="github" name="openembedded/bitbake" revision="1.32" path="bitbake">
+      <copyfile dest="setup-env" src="../.repo/manifests/setup-env"/>
+      <linkfile dest="scripts" src="../.repo/manifests/scripts"/>
+  </project>
+  <project remote="github" name="openembedded/openembedded-core" path="layers/openembedded-core"/>
+  <project remote="github" name="openembedded/meta-openembedded" path="layers/meta-openembedded"/>
+
+  <project remote="yocto" name="meta-virtualization" path="layers/meta-virtualization"/>
+  <project remote="yocto" name="meta-intel" path="layers/meta-intel" />
+</manifest>
+
