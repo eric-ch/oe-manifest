@@ -3,6 +3,7 @@
 
   <default revision="master" sync-j="1"/>
 
+  <!-- BBLAYERS: default.bblayers -->
   <remote fetch="http://git.yoctoproject.org/git" name="yocto"/>
   <remote fetch="https://github.com" name="github"/>
 

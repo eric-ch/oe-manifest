@@ -2,7 +2,6 @@
 
 __DEFAULT_BITBAKE_PATH="`pwd`/bitbake"
 BITBAKE_PATH=${BITBAKE_PATH:-${__DEFAULT_BITBAKE_PATH}}
-
 [ ! -e `which python` ] && {
     echo "python is missing." >&2
     exit 1

@@ -3,6 +3,7 @@
 
   <default revision="morty" sync-j="1"/>
 
+  <!-- BBLAYERS: norty.bblayers -->
   <remote fetch="http://git.yoctoproject.org/git" name="yocto"/>
   <remote fetch="https://github.com" name="github"/>
 

@@ -9,11 +9,11 @@ This could very well be an instance of:
 http://stackoverflow.com/questions/15856976/transactions-with-python-sqlite3
 ... from which this work-around comes from.
 
-diff --git a/lib/prserv/db.py b/lib/prserv/db.py
-index 495d09f..8910268 100644
---- a/lib/prserv/db.py
-+++ b/lib/prserv/db.py
-@@ -250,7 +250,7 @@ class PRData(object):
+Index: bitbake/lib/prserv/db.py
+===================================================================
+--- bitbake.orig/lib/prserv/db.py
++++ bitbake/lib/prserv/db.py
+@@ -242,7 +242,7 @@ class PRData(object):
          except OSError as e:
              if e.errno != errno.EEXIST:
                  raise e

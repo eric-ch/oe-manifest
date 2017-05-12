@@ -3,10 +3,11 @@
 
   <default revision="jethro" sync-j="1"/>
 
+  <!-- BBLAYERS: jethro.bblayers -->
   <remote fetch="http://git.yoctoproject.org/git" name="yocto"/>
   <remote fetch="https://github.com" name="github"/>
 
-  <project remote="github" name="openembedded/bitbake" revision="1.32" path="bitbake">
+  <project remote="github" name="openembedded/bitbake" revision="1.28" path="bitbake">
       <copyfile dest="setup-env" src="../.repo/manifests/setup-env"/>
       <linkfile dest="scripts" src="../.repo/manifests/scripts"/>
   </project>
