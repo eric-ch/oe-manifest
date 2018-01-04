@@ -1,41 +1,16 @@
 #! /bin/bash
 
 OEROOT="`pwd`"
-OE_CORE_SCRIPTS="${OEROOT}/layers/openembedded-core/scripts"
-BITBAKE_SCRIPTS="${OEROOT}/bitbake/bin"
+OE_CORE_SCRIPTS="`pwd`/layers/openembedded-core/scripts"
+BITBAKE_SCRIPTS="`pwd`/bitbake/bin"
 
 # Change PATH to make things more convenient.
-CLEAN_PATH=$(echo $PATH | sed "s|${OE_CORE_SCRIPTS}:||g")
-CLEAN_PATH=$(echo $CLEAN_PATH | sed "s|${BITBAKE_SCRIPTS}:||g")
-export PATH="${OE_CORE_SCRIPTS}":"${BITBAKE_SCRIPTS}":"${CLEAN_PATH}"
+export PATH="${OE_CORE_SCRIPTS}":"${BITBAKE_SCRIPTS}":"${PATH}"
 
 # Allow to build for different MACHINE directly.
-# This is mostly due to OpenXT using MACHINE like "images". That could/should
-# be fixed somewhere down the line.
 export BB_ENV_EXTRAWHITE="MACHINE DISTRO"
 
-# Manifest info.
-MANIFEST_DIR=".repo/manifests"
-MANIFEST_PATH="${OEROOT}/.repo/manifest.xml"
-MANIFEST_BRANCH=`sed -ne 's|.\+<default \+revision="\([[:print:]]\+\)" .\+/>|\1|p' ${MANIFEST_PATH}`
-
-# Python version management (quirks).
-__PYTHON_VERSION=`python --version 2>&1`
-PYTHON_VERSION=${__PYTHON_VERSION##* }
-PYTHON_VMAJOR=${PYTHON_VERSION%%.*}
-case "${MANIFEST_BRANCH}" in
-    "jehtro")
-        if [ ${PYTHON_VMAJOR} -ge 3 ]; then
-            ln -sf /usr/bin/python2 ${BITBAKE_PATH}/bin/python
-            ln -sf /usr/bin/python2-config ${BITBAKE_PATH}/bin/python-config
-        fi
-        ;;
-    *)
-esac
-
-# Deploy configuration for bitbake/OE
-mkdir -p conf
-ln -sf "../${MANIFEST_DIR}/conf/local.conf" conf/local.conf
+MANIFEST=".repo/manifests"
 
 # Default MACHINE.
 __DEFAULT_MACHINE="qemux86-64"
@@ -58,28 +33,3 @@ SSTATE_DIR = "${OEROOT}/sstate-cache"
 # Which files do we want to parse:
 BBFILES ?= "${OEROOT}/layers/openembedded-core/meta/recipes-*/*/*.bb"
 _EOF
-
-# Write bblayers.conf from manifest.
-case "${MANIFEST_BRANCH}" in
-    "jethro") LCONF_VERSION="6" ;;
-    *) LCONF_VERSION="7" ;;
-esac
-
-BBLAYERS_FILE=`sed -ne 's|[[:space:]]\+<!-- BBLAYERS: \([[:print:]]\+\) -->|\1|p' ${MANIFEST_PATH}`
-BBLAYERS_CONF="${MANIFEST_DIR}/conf/"
-
-cat > conf/bblayers.conf <<_EOF
-# LAYER_CONF_VERSION is increased each time conf/bblayers.conf changes
-# incompatibly
-
-LCONF_VERSION = "${LCONF_VERSION}"
-
-BBPATH = "\${TOPDIR}"
-BBFILES ?= ""
-BBLAYERS ?= " \\
-_EOF
-# Parse the bblayer file for that manifest.
-for layer in `cat "${BBLAYERS_CONF}/${BBLAYERS_FILE}"`; do
-    echo "  \${TOPDIR}/layers/${layer} \\" >> conf/bblayers.conf
-done
-echo '"' >> conf/bblayers.conf

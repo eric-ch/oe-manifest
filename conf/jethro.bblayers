@@ -1,6 +1,0 @@
-openembedded-core/meta
-meta-openembedded/meta-oe
-meta-openembedded/meta-python
-meta-openembedded/meta-networking
-meta-intel
-meta-virtualization
